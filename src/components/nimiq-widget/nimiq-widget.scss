@@ -12,6 +12,11 @@ $nim-grey: rgba(31, 35, 72, 0.27);
   flex-direction: column;
   align-items: flex-end;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+
+  &--hidden {
+    display: none !important;
+  }
 
   &__fab {
     background: $nim-blue;
@@ -29,10 +34,18 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     box-shadow: 8px 8px 12px 0 rgba(0,0,0,0.09),
                 8px 4px 12px 0 rgba(0,0,0,0.06);
 
+    &:hover {
+      .nim-wgt__fab__logo, .nim-wgt__fab__close {
+        transform: scale(1.1);
+      }
+    }
+
     &__logo {
       width: 24px;
       height: auto;
       text-align: center;
+      transition: transform 0.3s;
+      transform: scale(1);
     }
 
     &__close {
@@ -80,11 +93,15 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     padding: 12px;
 
     &__title {
+      background: transparent;
+      border: 0 none;
       font-size: 18px;
       font-weight: bold;
       color: #fff;
       float: left;
       margin: 0;
+      outline: none;
+      cursor: pointer;
     }
 
     &__logo {
@@ -99,16 +116,38 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     margin-top: -48px;
   }
 
-  &__miner {
+  &__card {
     border-radius: 4px;
     background: #fff;
-    padding: 12px;
+    padding: 16px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+
+    &-content {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__miner {
+  }
+
+  &__help {
+    p {
+      margin: 0 0 8px;
+
+      a {
+        font-weight: bold;
+        color: $nim-light-blue;
+        text-decoration: none;
+
+        &:hover {
+          color: $nim-light-blue;
+        }
+      }
+    }
   }
 
   &__settings {
     display: flex;
-    margin-bottom: 16px;
 
     &__title {
       font-weight: bold;
@@ -116,24 +155,25 @@ $nim-grey: rgba(31, 35, 72, 0.27);
       font-size: 12px;
       color: $nim-grey;
       letter-spacing: 0.05em;
+      margin: 0 0 8px;
     }
 
     &__hashrate {
       width: 50%;
-  
+
       &-value {
         font-size: 24px;
         font-weight: bold;
         margin-right: 4px;
       }
-    
+
       &-label {
         font-size: 12px;
         text-transform: uppercase;
         color: #333;
       }
     }
-  
+
     &__threads {
       width: 50%;
       padding-left: 12px;
@@ -144,13 +184,15 @@ $nim-grey: rgba(31, 35, 72, 0.27);
         height: 32px;
 
         &-value {
-          padding: 2px 8px;
+          padding: 2px 0;
           height: 28px;
+          line-height: 24px;
           box-sizing: border-box;
           z-index: 2;
           margin: 0;
-          text-align: center; 
+          text-align: center;
           font-weight: bold;
+          width: 32px;
         }
 
         &-button {
@@ -169,10 +211,16 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     padding: 8px 16px;
     font-weight: bold;
     box-sizing: border-box;
+    font-size: 14px;
     cursor: pointer;
+    transition: background 0.3s;
 
     &:active, &:focus {
       outline: none;
+    }
+
+    &:hover {
+      background: $nim-grey;
     }
 
     &--full {
@@ -182,7 +230,7 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     &--square {
       width: 28px;
       height: 28px;
-      font-size: 16px;      
+      font-size: 16px;
       line-height: 24px;
       padding: 0;
       padding-bottom: 2px;
