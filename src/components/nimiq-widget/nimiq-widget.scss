@@ -31,21 +31,19 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: transform 0.3s;
+    transform: translateY(0px);
     box-shadow: 8px 8px 12px 0 rgba(0,0,0,0.09),
                 8px 4px 12px 0 rgba(0,0,0,0.06);
 
     &:hover {
-      .nim-wgt__fab__logo, .nim-wgt__fab__close {
-        transform: scale(1.1);
-      }
+      transform: translateY(4px);
     }
 
     &__logo {
       width: 24px;
       height: auto;
       text-align: center;
-      transition: transform 0.3s;
-      transform: scale(1);
     }
 
     &__close {
