@@ -1,5 +1,5 @@
 import { Component, Prop, State } from '@stencil/core';
-declare var Nimiq;
+declare var Nimiq: any;
 
 @Component({
   tag: 'nimiq-widget',
@@ -27,15 +27,38 @@ export class Widget {
   @State() shouldWork = true
   @State() isMining = false
 
-  componentWillLoad() {
-    
+  componentDidLoad() {
+    // this.isOpen = true;
   }
 
   toggleWidget() {
     this.isOpen = !this.isOpen
   }
 
-  startMiner() {
+  loadNimiq() {
+    return new Promise((resolve, reject) => {
+      if ((window as any).Nimiq) {
+        resolve();
+        return;
+      }
+
+      let script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://cdn.nimiq.com/nimiq.js';
+      script.addEventListener('load', () => resolve(script), false);
+      script.addEventListener('error', () => reject(script), false);
+      document.body.appendChild(script);
+  });
+  }
+
+  async startMiner() {
+    try {
+      await this.loadNimiq()
+    } catch(error) {
+      this.goTo('adblock');
+      return;
+    }
+
     this.shouldWork = true
 
     if (!this.consensus) {
@@ -205,6 +228,21 @@ export class Widget {
               </div>
 
               <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">I agree</button>
+            </section>
+
+            <section class={'nim-wgt__card nim-wgt__adblock' + (this.page !== 'adblock' ? ' nim-wgt--hidden' : '')}>
+              <div class="nim-wgt__card-content">
+                <h3>Whoops !</h3>
+                <p>
+                  <b>We could not load Nimiq, please disable you adblocker !</b>
+                </p>
+                <p>
+                  This will allows us to continue to maintain this website and for you
+                  to enjoy our content.
+                </p>
+              </div>
+
+              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">Try again</button>
             </section>
 
           </main>

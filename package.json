@@ -20,7 +20,6 @@
     "@stencil/sass": "^0.1.1"
   },
   "devDependencies": {
-    "@nimiq/core-types": "^1.4.1",
     "@stencil/core": "~0.15.2"
   },
   "license": "MIT"

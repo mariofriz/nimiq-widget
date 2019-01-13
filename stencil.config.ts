@@ -1,5 +1,6 @@
 import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
+const builtins = require('rollup-plugin-node-builtins');
 
 export const config: Config = {
   namespace: 'nimiqwidget',
@@ -12,6 +13,7 @@ export const config: Config = {
     }
   ],
   plugins: [
-    sass()
+    sass(),
+    builtins()
   ]
 };
