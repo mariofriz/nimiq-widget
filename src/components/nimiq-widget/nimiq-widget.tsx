@@ -11,6 +11,7 @@ export class Widget {
   consensus: any = null
   blockchain: any = null
   account: any = null
+  availableThreads = navigator.hardwareConcurrency || 4
   pool = {
     host: 'eu.sushipool.com',
     port: '443'
@@ -64,7 +65,7 @@ export class Widget {
 
     const deviceId = Nimiq.BasePoolMiner.generateDeviceId(this.network.config)
     this.miner = new Nimiq.NanoPoolMiner(this.blockchain, this.network.time, this.account, deviceId)
-    this.miner.threads = this.threads
+    this.miner.threads = Math.ceil(this.availableThreads / 2)
 
     this.consensus.on('established', this.onConsensusEstablished.bind(this))
     this.consensus.on('lost', this.onConsensusLost.bind(this))
@@ -125,7 +126,8 @@ export class Widget {
   }
 
   updateThreads(value) {
-    this.threads += value;
+    this.miner.threads += value
+    this.threads += value
   }
 
   goTo(page: string) {
@@ -166,9 +168,17 @@ export class Widget {
                   <h3 class="nim-wgt__settings__title">Threads</h3>
 
                   <div class="nim-wgt__settings__threads__counter">
-                    <button onClick={() => this.updateThreads(-1)} class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square">-</button>
+                    <button 
+                      onClick={() => this.updateThreads(-1)} 
+                      disabled={this.threads === 1}
+                      class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square"
+                    >-</button>
                     <p class="nim-wgt__settings__threads__counter-value">{ this.threads }</p>
-                    <button onClick={() => this.updateThreads(1)} class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square">+</button>
+                    <button 
+                      onClick={() => this.updateThreads(1)}
+                      disabled={this.threads == this.availableThreads}
+                      class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square"
+                    >+</button>
                   </div>
                 </div>
                 <div class={'nim-wgt__settings__status' + (this.isMining ? ' nim-wgt__settings__status--hidden' : '')}>

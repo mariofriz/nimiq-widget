@@ -74,12 +74,22 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     width: 100vw;
     max-width: 280px;
     border-radius: 8px;
-    margin: 12px 0 12px 12px;
+    margin: 0;
     box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16) !important;
-    display: none;
+    max-height: 0;
+    transition: opacity 0s,
+                max-height 0.1s;
+    opacity: 0;
+    transform: translateY(16px);
 
     &--open {
-      display: block;
+      max-height: none;
+      opacity: 1;
+      transform: translateY(0px);
+      transition: opacity 0.3s,
+                  transform 0.3s;
+      transition-delay: max-height 0.3s;
+      margin: 12px 0 12px 12px;
     }
   }
 
