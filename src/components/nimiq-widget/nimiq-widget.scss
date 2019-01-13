@@ -126,6 +126,7 @@ $nim-grey: rgba(31, 35, 72, 0.27);
   }
 
   &__miner {
+    position: relative;
   }
 
   &__help {
@@ -146,6 +147,7 @@ $nim-grey: rgba(31, 35, 72, 0.27);
 
   &__settings {
     display: flex;
+    position: relative;
 
     &__title {
       font-weight: bold;
@@ -175,6 +177,7 @@ $nim-grey: rgba(31, 35, 72, 0.27);
     &__threads {
       width: 50%;
       padding-left: 12px;
+      padding-top: 2px;
 
       &__counter {
         display: flex;
@@ -196,6 +199,33 @@ $nim-grey: rgba(31, 35, 72, 0.27);
         &-button {
           z-index: 5;
         }
+      }
+    }
+
+    &__status {
+      position: absolute;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.8);
+      opacity: 1;
+      transition: opacity 0.3s;
+
+      p {
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      &--hidden {
+        z-index: -5;
+        opacity: 0;
+        pointer-events: none;
       }
     }
   }
@@ -221,6 +251,12 @@ $nim-grey: rgba(31, 35, 72, 0.27);
       background: $nim-grey;
     }
 
+    &[disabled] {
+      pointer-events: none;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     &--full {
       width: 100%;
     }
@@ -232,6 +268,45 @@ $nim-grey: rgba(31, 35, 72, 0.27);
       line-height: 24px;
       padding: 0;
       padding-bottom: 2px;
+    }
+  }
+
+  @keyframes dot-loader-animation {
+    15% { box-shadow: 10px -3px #3b3b3b; }
+    30% { box-shadow: 10px 3px #3b3b3b; }
+    0%, 45%, 100% { box-shadow: 10px 0 #3b3b3b; }
+  }
+
+  &__loader {
+    position: relative;    
+    margin: 0 24px 0.16em 4px;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 10px 0 #3b3b3b;
+    animation: dot-loader-animation 1s ease-in-out 0s infinite;
+    animation-delay: 0.1s;
+
+    &:before, &:after {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 10px 0 #3b3b3b;
+      animation: dot-loader-animation 1s ease-in-out 0s infinite;
+      content: '';
+      position: absolute;
+    }
+
+    &:before {      
+      left: -12px;
+      animation-delay: 0s;      
+    }
+
+    &:after {
+      left: 12px;
+      animation-delay: 0.2s;
     }
   }
 }

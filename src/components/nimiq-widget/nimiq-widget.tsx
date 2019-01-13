@@ -1,19 +1,33 @@
 import { Component, Prop, State } from '@stencil/core';
+declare var Nimiq;
 
 @Component({
   tag: 'nimiq-widget',
   styleUrl: 'nimiq-widget.scss',
 })
 export class Widget {
+  miner: any = null
+  network: any = null
+  consensus: any = null
+  blockchain: any = null
+  account: any = null
+  pool = {
+    host: 'eu.sushipool.com',
+    port: '443'
+  }
+
+  @Prop() address = 'NQ65 HRRC 7TSB XSD8 GQBD 63JM HDNK 855V T13T'
 
   @State() isOpen = false
   @State() page = 'help'
+  @State() hashrate = 0
   @State() threads = 1
-
-  @Prop() address: string
+  @State() status = '...'
+  @State() shouldWork = true
+  @State() isMining = false
 
   componentWillLoad() {
-    console.log(this.address)
+    
   }
 
   toggleWidget() {
@@ -21,11 +35,93 @@ export class Widget {
   }
 
   startMiner() {
-    console.log('start miner')
+    this.shouldWork = true
+
+    if (!this.consensus) {
+      this.status = 'Connecting...'
+      Nimiq.init(this.initMiner.bind(this))
+
+      return;
+    }
+  
+    this.work()    
   }
 
   pauseMiner() {
-    console.log('start pause')
+    this.shouldWork = false
+    this.miner.stopWork()    
+  }
+
+  async initMiner() {
+    Nimiq.GenesisConfig.main()
+    const config = new Nimiq.DumbNetworkConfig();
+    const consensus = await Nimiq.Consensus.nano(config)
+
+    this.consensus = consensus
+    this.network = consensus.network
+    this.blockchain = consensus.blockchain
+    this.account = Nimiq.Address.fromUserFriendlyAddress(this.address)
+
+    const deviceId = Nimiq.BasePoolMiner.generateDeviceId(this.network.config)
+    this.miner = new Nimiq.NanoPoolMiner(this.blockchain, this.network.time, this.account, deviceId)
+    this.miner.threads = this.threads
+
+    this.consensus.on('established', this.onConsensusEstablished.bind(this))
+    this.consensus.on('lost', this.onConsensusLost.bind(this))
+    
+    this.miner.on('start', this.onMinerStarted.bind(this))
+    this.miner.on('connection-state', this.onMinerConnectionState.bind(this))
+    this.miner.on('hashrate-changed', this.onHashRateChanged.bind(this))
+    this.miner.on('stop', this.onMinerStopped.bind(this))
+
+    this.status = 'Synchronizing...'
+
+    this.network.connect()
+  }
+
+  work() {
+    if (!this.miner.working && this.shouldWork) {
+      this.miner.startWork()
+    }    
+  }
+
+  onConsensusEstablished() {
+    this.status = 'Consensus established'
+
+    const { host, port } = this.pool
+    this.miner.connect(host, port)
+    this.work()
+  }
+
+  onConsensusLost() {
+    console.log('consensus lost')
+  }
+
+  onMinerStarted() {
+    this.isMining = true
+    this.hashrate = this.miner.hashrate
+  }
+
+  onMinerConnectionState() {
+    this.work()
+  }
+
+  onHashRateChanged() {
+    this.hashrate = this.miner.hashrate
+  }
+
+  onMinerStopped() {
+    if (!this.shouldWork) {
+      this.isMining = false
+      this.status = 'Paused'
+    }
+    
+    this.work()    
+  }
+
+  agreeTerms() {
+    this.goTo('miner')
+    this.startMiner()
   }
 
   updateThreads(value) {
@@ -34,6 +130,17 @@ export class Widget {
 
   goTo(page: string) {
     this.page = page
+  }
+
+  renderButton() {
+    if (!this.isMining && this.shouldWork) {
+      return <span class="nim-wgt__loader"></span>
+    }
+    else if (this.shouldWork) {
+      return <button onClick={() => this.pauseMiner()} class={'nim-wgt__button'} disabled={!this.isMining} type="button">Pause mining</button>
+    } else {
+      return <button onClick={() => this.startMiner()} class={'nim-wgt__button'} type="button">Start mining</button>
+    }
   }
 
   render() {
@@ -52,7 +159,7 @@ export class Widget {
               <div class="nim-wgt__card-content nim-wgt__settings">
                 <div class="nim-wgt__settings__hashrate">
                   <h3 class="nim-wgt__settings__title">Hashrate</h3>
-                  <span class="nim-wgt__settings__hashrate-value">3.2</span>
+                  <span class="nim-wgt__settings__hashrate-value">{ this.hashrate }</span>
                   <span class="nim-wgt__settings__hashrate-label">H/s</span>
                 </div>
                 <div class="nim-wgt__settings__threads">
@@ -64,9 +171,12 @@ export class Widget {
                     <button onClick={() => this.updateThreads(1)} class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square">+</button>
                   </div>
                 </div>
+                <div class={'nim-wgt__settings__status' + (this.isMining ? ' nim-wgt__settings__status--hidden' : '')}>
+                  <p>{ this.status }</p>
+                </div>
               </div>
 
-              <button onClick={() => this.startMiner()} class="nim-wgt__button " type="button">Start mining</button>
+              { this.renderButton() }
             </section>
 
             <section class={'nim-wgt__card nim-wgt__help' + (this.page !== 'help' ? ' nim-wgt--hidden' : '')}>
@@ -84,7 +194,7 @@ export class Widget {
                 </p>
               </div>
 
-              <button onClick={() => this.goTo('miner')} class="nim-wgt__button nim-wgt__button--full" type="button">I agree</button>
+              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">I agree</button>
             </section>
 
           </main>
