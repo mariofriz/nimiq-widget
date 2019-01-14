@@ -17,6 +17,14 @@ export class Widget {
     port: '443'
   }
 
+  @State() isOpen = false
+  @State() page = 'help'
+  @State() hashrate = 0
+  @State() threads = 1
+  @State() status = 'Connecting...'
+  @State() shouldWork = true
+  @State() isMining = false
+
   @Prop() address = 'NQ65 HRRC 7TSB XSD8 GQBD 63JM HDNK 855V T13T'
   @Prop() shouldHideAfterTerms = true
   @Prop() greeting = 'Hi there,'
@@ -34,18 +42,6 @@ export class Widget {
   @Prop() disableAdblock: string = `
     We could not load Nimiq, please disable you adblocker !
   `
-
-  @State() isOpen = false
-  @State() page = 'help'
-  @State() hashrate = 0
-  @State() threads = 1
-  @State() status = 'Connecting...'
-  @State() shouldWork = true
-  @State() isMining = false
-
-  componentDidLoad() {
-    
-  }
 
   toggleWidget() {
     this.isOpen = !this.isOpen
@@ -81,10 +77,14 @@ export class Widget {
       this.status = 'Connecting...'
       Nimiq.init(this.initMiner.bind(this))
 
+      if (this.shouldHideAfterTerms) {
+        this.isOpen = false;
+      }
+
       return;
     }
   
-    this.work()    
+    this.work()
   }
 
   pauseMiner() {
@@ -94,8 +94,7 @@ export class Widget {
 
   async initMiner() {
     Nimiq.GenesisConfig.main()
-    const config = new Nimiq.DumbNetworkConfig();
-    const consensus = await Nimiq.Consensus.nano(config)
+    const consensus = await Nimiq.Consensus.nano()
 
     this.consensus = consensus
     this.network = consensus.network
