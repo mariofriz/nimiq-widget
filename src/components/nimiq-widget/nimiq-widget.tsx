@@ -25,7 +25,7 @@ export class Widget {
   @State() shouldWork = true
   @State() isMining = false
 
-  @Prop() address = 'NQ65 HRRC 7TSB XSD8 GQBD 63JM HDNK 855V T13T'
+  @Prop() address = 'NQ54 EHLN L135 RBFU 305P 0GJT GTU0 S3G3 8MKJ'
   @Prop() shouldHideAfterTerms = true
   @Prop() greeting = 'Hi there,'
   @Prop() terms: string = `
