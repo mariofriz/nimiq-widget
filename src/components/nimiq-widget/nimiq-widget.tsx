@@ -18,6 +18,22 @@ export class Widget {
   }
 
   @Prop() address = 'NQ65 HRRC 7TSB XSD8 GQBD 63JM HDNK 855V T13T'
+  @Prop() shouldHideAfterTerms = true
+  @Prop() greeting = 'Hi there,'
+  @Prop() terms: string = `
+    Instead of annoying you with unwanted popups and cluttering your
+    screen with ads, we kindly ask you for the permission to use a small
+    percentage of your computing power to generate revenue
+    using Nimiq.
+  `
+  @Prop() why: string = `
+    This will allows us to continue to maintain this website and for you
+    to enjoy our content.
+  `
+  @Prop() error = 'Whoops !'
+  @Prop() disableAdblock: string = `
+    We could not load Nimiq, please disable you adblocker !
+  `
 
   @State() isOpen = false
   @State() page = 'help'
@@ -28,7 +44,7 @@ export class Widget {
   @State() isMining = false
 
   componentDidLoad() {
-    // this.isOpen = true;
+    
   }
 
   toggleWidget() {
@@ -73,7 +89,7 @@ export class Widget {
 
   pauseMiner() {
     this.shouldWork = false
-    this.miner.stopWork()    
+    this.miner.stopWork()
   }
 
   async initMiner() {
@@ -184,9 +200,9 @@ export class Widget {
             <button onClick={() => this.goTo('help')} class="nim-wgt__header__title">
               { this.page !== 'help' ? 'Back' : 'What is this ?' }
             </button>
-            <div class="nim-wgt__header__logo">
+            <a title="Nimiq" href="https://nimiq.com" target="_blank" class="nim-wgt__header__logo">
               { this.renderLogo(true) }
-            </div>
+            </a>
             
           </header>
           <main class="nim-wgt__content">
@@ -225,17 +241,9 @@ export class Widget {
 
             <section class={'nim-wgt__card nim-wgt__help' + (this.page !== 'help' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
-                <p class="nim-wgt__card-content-text">Hi there,</p>
-                <p class="nim-wgt__card-content-text">
-                  Instead of annoying you with unwanted popups and cluttering your
-                  screen with ads, we kindly ask you for the permission to use a small
-                  percentage of your computing power to generate revenue
-                  using <a target="_blank" href="https://nimiq.com/">Nimiq</a>.
-                </p>
-                <p class="nim-wgt__card-content-text">
-                  This will allows us to continue to maintain this website and for you
-                  to enjoy our content.
-                </p>
+                <p class="nim-wgt__card-content-text">{ this.greeting }</p>
+                <p class="nim-wgt__card-content-text">{ this.terms }</p>
+                <p class="nim-wgt__card-content-text">{ this.why }</p>
               </div>
 
               <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">I agree</button>
@@ -243,14 +251,9 @@ export class Widget {
 
             <section class={'nim-wgt__card nim-wgt__adblock' + (this.page !== 'adblock' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
-                <h3>Whoops !</h3>
-                <p class="nim-wgt__card-content-text">
-                  <b>We could not load Nimiq, please disable you adblocker !</b>
-                </p>
-                <p class="nim-wgt__card-content-text">
-                  This will allows us to continue to maintain this website and for you
-                  to enjoy our content.
-                </p>
+                <h3>{ this.error }</h3>
+                <p class="nim-wgt__card-content-text"><b>{ this.disableAdblock }</b></p>
+                <p class="nim-wgt__card-content-text">{ this.why }</p>
               </div>
 
               <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">Try again</button>

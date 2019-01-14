@@ -14,9 +14,21 @@ export namespace Components {
 
   interface NimiqWidget {
     'address': string;
+    'disableAdblock': string;
+    'error': string;
+    'greeting': string;
+    'shouldHideAfterTerms': boolean;
+    'terms': string;
+    'why': string;
   }
   interface NimiqWidgetAttributes extends StencilHTMLAttributes {
     'address'?: string;
+    'disableAdblock'?: string;
+    'error'?: string;
+    'greeting'?: string;
+    'shouldHideAfterTerms'?: boolean;
+    'terms'?: string;
+    'why'?: string;
   }
 }
 
