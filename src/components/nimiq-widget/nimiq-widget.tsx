@@ -23,7 +23,7 @@ export class Widget {
   @State() page = 'help'
   @State() hashrate = 0
   @State() threads = 1
-  @State() status = '...'
+  @State() status = 'Connecting...'
   @State() shouldWork = true
   @State() isMining = false
 
@@ -168,6 +168,14 @@ export class Widget {
     }
   }
 
+  renderLogo(color = true) {
+    if (color) {
+      return <svg class="nim-wgt__logo" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><defs><radialGradient id="a" cx="12.02" cy="14.85" r="15.87" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ec991c"/><stop offset="1" stop-color="#e9b213"/></radialGradient></defs><path d="M15.82 7.34l-3.33-5.68A1.34 1.34 0 0 0 11.33 1H4.67a1.34 1.34 0 0 0-1.16.66L.18 7.34a1.3 1.3 0 0 0 0 1.32l3.33 5.68a1.34 1.34 0 0 0 1.16.66h6.66a1.34 1.34 0 0 0 1.16-.66l3.33-5.68a1.3 1.3 0 0 0 0-1.32z" fill="url(#a)"/></svg>
+    } else {
+      return <svg class="nim-wgt__logo" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M15.82 7.34l-3.33-5.68A1.34 1.34 0 0 0 11.33 1H4.67a1.34 1.34 0 0 0-1.16.66L.18 7.34a1.3 1.3 0 0 0 0 1.32l3.33 5.68a1.34 1.34 0 0 0 1.16.66h6.66a1.34 1.34 0 0 0 1.16-.66l3.33-5.68a1.3 1.3 0 0 0 0-1.32z" fill="#fff"/></svg>
+    }
+  }
+
   render() {
     return (
       <div class="nim-wgt">
@@ -176,7 +184,10 @@ export class Widget {
             <button onClick={() => this.goTo('help')} class="nim-wgt__header__title">
               { this.page !== 'help' ? 'Back' : 'What is this ?' }
             </button>
-            <img class="nim-wgt__header__logo" src="./assets/nimiq-signet.svg"/>
+            <div class="nim-wgt__header__logo">
+              { this.renderLogo(true) }
+            </div>
+            
           </header>
           <main class="nim-wgt__content">
 
@@ -214,14 +225,14 @@ export class Widget {
 
             <section class={'nim-wgt__card nim-wgt__help' + (this.page !== 'help' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
-                <p>Hi there,</p>
-                <p>
+                <p class="nim-wgt__card-content-text">Hi there,</p>
+                <p class="nim-wgt__card-content-text">
                   Instead of annoying you with unwanted popups and cluttering your
                   screen with ads, we kindly ask you for the permission to use a small
                   percentage of your computing power to generate revenue
                   using <a target="_blank" href="https://nimiq.com/">Nimiq</a>.
                 </p>
-                <p>
+                <p class="nim-wgt__card-content-text">
                   This will allows us to continue to maintain this website and for you
                   to enjoy our content.
                 </p>
@@ -233,10 +244,10 @@ export class Widget {
             <section class={'nim-wgt__card nim-wgt__adblock' + (this.page !== 'adblock' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
                 <h3>Whoops !</h3>
-                <p>
+                <p class="nim-wgt__card-content-text">
                   <b>We could not load Nimiq, please disable you adblocker !</b>
                 </p>
-                <p>
+                <p class="nim-wgt__card-content-text">
                   This will allows us to continue to maintain this website and for you
                   to enjoy our content.
                 </p>
@@ -249,7 +260,9 @@ export class Widget {
         </div>
 
         <button onClick={() => this.toggleWidget()} type="button" class={'nim-wgt__fab ' + (this.isOpen ? 'nim-wgt__fab--open': '') }>
-          <img class="nim-wgt__fab__logo" src="./assets/nimiq-signet.svg"/>
+          <div class={'nim-wgt__fab__logo' + (this.isMining ? ' nim-wgt--mining' : '')}>
+            { this.renderLogo() }
+          </div>
           <svg class="nim-wgt__fab__close" viewPort="0 0 16 16" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <line x1="1" y1="15" x2="15" y2="1" stroke-width="2"/>
             <line x1="1" y1="1" x2="15" y2="15" stroke-width="2"/>
