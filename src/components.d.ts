@@ -14,21 +14,14 @@ export namespace Components {
 
   interface NimiqWidget {
     'address': string;
-    'disableAdblock': string;
-    'error': string;
-    'greeting': string;
-    'shouldHideAfterTerms': boolean;
-    'terms': string;
-    'why': string;
+    'autoHide': boolean;
+    'language': any;
   }
   interface NimiqWidgetAttributes extends StencilHTMLAttributes {
     'address'?: string;
-    'disableAdblock'?: string;
-    'error'?: string;
-    'greeting'?: string;
-    'shouldHideAfterTerms'?: boolean;
-    'terms'?: string;
-    'why'?: string;
+    'autoHide'?: boolean;
+    'language'?: any;
+    'onNimiq-widget-ready'?: (event: CustomEvent) => void;
   }
 }
 

@@ -1,4 +1,5 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter, Watch } from '@stencil/core';
+import { i18n } from './i18n';
 declare var Nimiq: any;
 
 @Component({
@@ -21,27 +22,42 @@ export class Widget {
   @State() page = 'help'
   @State() hashrate = 0
   @State() threads = 1
-  @State() status = 'Connecting...'
+  @State() status = i18n['en'].common.connecting
   @State() shouldWork = true
   @State() isMining = false
+  @State() i18n: any = {}
 
   @Prop() address = 'NQ54 EHLN L135 RBFU 305P 0GJT GTU0 S3G3 8MKJ'
-  @Prop() shouldHideAfterTerms = true
-  @Prop() greeting = 'Hi there,'
-  @Prop() terms: string = `
-    Instead of annoying you with unwanted popups and cluttering your
-    screen with ads, we kindly ask you for the permission to use a small
-    percentage of your computing power to generate revenue
-    using Nimiq.
-  `
-  @Prop() why: string = `
-    This will allows us to continue to maintain this website and for you
-    to enjoy our content.
-  `
-  @Prop() error = 'Whoops !'
-  @Prop() disableAdblock: string = `
-    We could not load Nimiq, please disable you adblocker !
-  `
+  @Prop() autoHide = true
+  @Prop() language: any = 'en'
+
+  @Watch('language')
+  languageChanged(newLanguage: any) {
+    this.setLanguage(newLanguage)
+  }
+
+  @Event({
+    eventName: 'nimiq-widget-ready'
+  }) widgetReady: EventEmitter;
+
+  componentWillLoad() {
+    this.setLanguage(this.language)
+  }
+
+  componentDidLoad() {
+    this.widgetReady.emit()
+  }
+
+  setLanguage(language) {
+    console.log('set lang', language)
+    if (i18n[language]) {
+      this.i18n = i18n[language]
+    } else if (language && language.common) {
+      this.i18n = language
+    } else {
+      this.i18n = i18n['en']
+    }
+  }
 
   toggleWidget() {
     this.isOpen = !this.isOpen
@@ -74,16 +90,16 @@ export class Widget {
     this.shouldWork = true
 
     if (!this.consensus) {
-      this.status = 'Connecting...'
+      this.status = this.i18n.common.connecting
       Nimiq.init(this.initMiner.bind(this))
 
-      if (this.shouldHideAfterTerms) {
+      if (this.autoHide) {
         this.isOpen = false;
       }
 
       return;
     }
-  
+
     this.work()
   }
 
@@ -107,13 +123,13 @@ export class Widget {
 
     this.consensus.on('established', this.onConsensusEstablished.bind(this))
     this.consensus.on('lost', this.onConsensusLost.bind(this))
-    
+
     this.miner.on('start', this.onMinerStarted.bind(this))
     this.miner.on('connection-state', this.onMinerConnectionState.bind(this))
     this.miner.on('hashrate-changed', this.onHashRateChanged.bind(this))
     this.miner.on('stop', this.onMinerStopped.bind(this))
 
-    this.status = 'Synchronizing...'
+    this.status = this.i18n.common.connecting
 
     this.network.connect()
   }
@@ -121,12 +137,10 @@ export class Widget {
   work() {
     if (!this.miner.working && this.shouldWork) {
       this.miner.startWork()
-    }    
+    }
   }
 
   onConsensusEstablished() {
-    this.status = 'Consensus established'
-
     const { host, port } = this.pool
     this.miner.connect(host, port)
     this.work()
@@ -152,10 +166,10 @@ export class Widget {
   onMinerStopped() {
     if (!this.shouldWork) {
       this.isMining = false
-      this.status = 'Paused'
+      this.status = this.i18n.miner.paused
     }
-    
-    this.work()    
+
+    this.work()
   }
 
   agreeTerms() {
@@ -174,12 +188,11 @@ export class Widget {
 
   renderButton() {
     if (!this.isMining && this.shouldWork) {
-      return <span class="nim-wgt__loader"></span>
-    }
-    else if (this.shouldWork) {
-      return <button onClick={() => this.pauseMiner()} class={'nim-wgt__button'} disabled={!this.isMining} type="button">Pause mining</button>
+      return null
+    } else if (this.shouldWork) {
+      return <button onClick={() => this.pauseMiner()} class={'nim-wgt__button'} disabled={!this.isMining} type="button">{this.i18n.miner.pauseMining}</button>
     } else {
-      return <button onClick={() => this.startMiner()} class={'nim-wgt__button'} type="button">Start mining</button>
+      return <button onClick={() => this.startMiner()} class={'nim-wgt__button'} type="button">{this.i18n.miner.startMining}</button>
     }
   }
 
@@ -197,33 +210,33 @@ export class Widget {
         <div class={'nim-wgt__window ' + (this.isOpen ? 'nim-wgt__window--open' : '')}>
           <header class="nim-wgt__header">
             <button onClick={() => this.goTo('help')} class="nim-wgt__header__title">
-              { this.page !== 'help' ? 'Back' : 'What is this ?' }
+              { this.page !== 'help' ? this.i18n.common.back : this.i18n.terms.title }
             </button>
             <a title="Nimiq" href="https://nimiq.com" target="_blank" class="nim-wgt__header__logo">
               { this.renderLogo(true) }
             </a>
-            
+
           </header>
           <main class="nim-wgt__content">
 
             <section class={'nim-wgt__card nim-wgt__miner' + (this.page !== 'miner' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content nim-wgt__settings">
                 <div class="nim-wgt__settings__hashrate">
-                  <h3 class="nim-wgt__settings__title">Hashrate</h3>
+                  <h3 class="nim-wgt__settings__title">{this.i18n.miner.hashrate}</h3>
                   <span class="nim-wgt__settings__hashrate-value">{ this.hashrate }</span>
                   <span class="nim-wgt__settings__hashrate-label">H/s</span>
                 </div>
                 <div class="nim-wgt__settings__threads">
-                  <h3 class="nim-wgt__settings__title">Threads</h3>
+                  <h3 class="nim-wgt__settings__title">{this.i18n.miner.threads}</h3>
 
                   <div class="nim-wgt__settings__threads__counter">
-                    <button 
-                      onClick={() => this.updateThreads(-1)} 
+                    <button
+                      onClick={() => this.updateThreads(-1)}
                       disabled={this.threads === 1}
                       class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square"
                     >-</button>
                     <p class="nim-wgt__settings__threads__counter-value">{ this.threads }</p>
-                    <button 
+                    <button
                       onClick={() => this.updateThreads(1)}
                       disabled={this.threads == this.availableThreads}
                       class="nim-wgt__settings__threads__counter-button nim-wgt__button nim-wgt__button--square"
@@ -232,6 +245,7 @@ export class Widget {
                 </div>
                 <div class={'nim-wgt__settings__status' + (this.isMining ? ' nim-wgt__settings__status--hidden' : '')}>
                   <p>{ this.status }</p>
+                  <span class={'nim-wgt__loader' + (this.isMining ? ' nim-wgt--hidden' : '')}></span>
                 </div>
               </div>
 
@@ -240,22 +254,24 @@ export class Widget {
 
             <section class={'nim-wgt__card nim-wgt__help' + (this.page !== 'help' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
-                <p class="nim-wgt__card-content-text">{ this.greeting }</p>
-                <p class="nim-wgt__card-content-text">{ this.terms }</p>
-                <p class="nim-wgt__card-content-text">{ this.why }</p>
+                {this.i18n.terms.body.map((text) =>
+                  <p class="nim-wgt__card-content-text">{text}</p>
+                )}
               </div>
 
-              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">I agree</button>
+              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">{this.i18n.terms.buttonText}</button>
             </section>
 
             <section class={'nim-wgt__card nim-wgt__adblock' + (this.page !== 'adblock' ? ' nim-wgt--hidden' : '')}>
               <div class="nim-wgt__card-content">
-                <h3>{ this.error }</h3>
-                <p class="nim-wgt__card-content-text"><b>{ this.disableAdblock }</b></p>
-                <p class="nim-wgt__card-content-text">{ this.why }</p>
+                <h3>{this.i18n.adblock.title}</h3>
+                <p class="nim-wgt__card-content-text"><b>{this.i18n.adblock.warning}</b></p>
+                {this.i18n.adblock.body.map((text) =>
+                  <p class="nim-wgt__card-content-text">{text}</p>
+                )}
               </div>
 
-              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">Try again</button>
+              <button onClick={() => this.agreeTerms()} class="nim-wgt__button nim-wgt__button--full" type="button">{this.i18n.adblock.buttonText}</button>
             </section>
 
           </main>

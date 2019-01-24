@@ -103,7 +103,7 @@ $nim-red: #D94432;
     background: $nim-blue;
     background-image: $nim-blue-bg;
     height: 92px;
-    padding: 12px;
+    padding: 16px 12px;
 
     &__title {
       background: transparent;
@@ -115,6 +115,10 @@ $nim-red: #D94432;
       margin: 0;
       outline: none;
       cursor: pointer;
+
+      &:active, &:focus {
+        outline: none;
+      }
     }
 
     &__logo {
@@ -166,7 +170,7 @@ $nim-red: #D94432;
   }
 
   &__adblock {
-    h3 {      
+    h3 {
       margin-bottom: 12px;
     }
 
@@ -307,17 +311,17 @@ $nim-red: #D94432;
   }
 
   @keyframes dot-loader-animation {
-    15% { box-shadow: 10px -3px #3b3b3b; }
-    30% { box-shadow: 10px 3px #3b3b3b; }
+    15% { box-shadow: 10px -2px #3b3b3b; }
+    30% { box-shadow: 10px 2px #3b3b3b; }
     0%, 45%, 100% { box-shadow: 10px 0 #3b3b3b; }
   }
 
   &__loader {
-    position: relative;    
-    margin: 0 24px 0.16em 4px;
+    position: relative;
+    margin: 0 18px -8px 2px;
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
     box-shadow: 10px 0 #3b3b3b;
     animation: dot-loader-animation 1s ease-in-out 0s infinite;
@@ -325,8 +329,8 @@ $nim-red: #D94432;
 
     &:before, &:after {
       display: inline-block;
-      width: 8px;
-      height: 8px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       box-shadow: 10px 0 #3b3b3b;
       animation: dot-loader-animation 1s ease-in-out 0s infinite;
@@ -334,13 +338,13 @@ $nim-red: #D94432;
       position: absolute;
     }
 
-    &:before {      
-      left: -12px;
-      animation-delay: 0s;      
+    &:before {
+      left: -8px;
+      animation-delay: 0s;
     }
 
     &:after {
-      left: 12px;
+      left: 8px;
       animation-delay: 0.2s;
     }
   }
