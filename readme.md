@@ -2,7 +2,7 @@
 
 # Nimiq Widget ![beta](https://img.shields.io/badge/status-beta-orange.svg)
 
-The Nimiq Widget is a small utility web component for nimiq mining. It can be used to monetize a website by using the user's computing power to generate revenue.
+The Nimiq Widget is a small utility web component for [Nimiq](https://nimiq.com/) mining. It can be used to monetize a website by using the user's computing power to generate revenue.
 
 *Development status is still beta, this is not meant to be used in production blindly.*
 
@@ -15,7 +15,7 @@ Include this code in your `<head>` of your HTML
 ```html
 <head>
   <!-- ... -->
-  <script src='https://unpkg.com/nimiq-widget'></script>
+  <script src='https://unpkg.com/nimiq-widget/dist/nimiqwidget.js'></script>
   <!-- ... -->
 </head>
 ```
