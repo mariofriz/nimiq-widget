@@ -13,14 +13,35 @@ import '@stencil/core';
 export namespace Components {
 
   interface NimiqWidget {
+    /**
+    * Address to which the mining rewards will be paid
+    */
     'address': string;
+    /**
+    * If `true`, will hide the widget once user agrees to terms
+    */
     'autoHide': boolean;
+    /**
+    * Language for the user interface
+    */
     'language': any;
   }
   interface NimiqWidgetAttributes extends StencilHTMLAttributes {
+    /**
+    * Address to which the mining rewards will be paid
+    */
     'address'?: string;
+    /**
+    * If `true`, will hide the widget once user agrees to terms
+    */
     'autoHide'?: boolean;
+    /**
+    * Language for the user interface
+    */
     'language'?: any;
+    /**
+    * Emitted when widget is loaded, can be used to change parameters with JS
+    */
     'onNimiq-widget-ready'?: (event: CustomEvent) => void;
   }
 }

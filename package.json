@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "nimiq widget to monetize your website",
   "module": "dist/esm/index.js",
-  "main": "dist/nimiqwidget.js",
+  "main": "dist/index.js",
   "unpkg": "dist/nimiqwidget.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",

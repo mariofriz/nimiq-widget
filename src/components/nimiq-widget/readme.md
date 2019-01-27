@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property   | Attribute   | Description | Type      |
-| ---------- | ----------- | ----------- | --------- |
-| `address`  | `address`   |             | `string`  |
-| `autoHide` | `auto-hide` |             | `boolean` |
-| `language` | --          |             | `any`     |
+| Property   | Attribute   | Description                                               | Type      |
+| ---------- | ----------- | --------------------------------------------------------- | --------- |
+| `address`  | `address`   | Address to which the mining rewards will be paid          | `string`  |
+| `autoHide` | `auto-hide` | If `true`, will hide the widget once user agrees to terms | `boolean` |
+| `language` | --          | Language for the user interface                           | `any`     |
 
 
 ## Events
 
-| Event                | Detail | Description |
-| -------------------- | ------ | ----------- |
-| `nimiq-widget-ready` |        |             |
+| Event                | Detail | Description                                                             |
+| -------------------- | ------ | ----------------------------------------------------------------------- |
+| `nimiq-widget-ready` |        | Emitted when widget is loaded, can be used to change parameters with JS |
 
 
 ----------------------------------------------

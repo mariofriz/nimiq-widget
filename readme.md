@@ -6,6 +6,8 @@ The Nimiq Widget is a small utility web component for nimiq mining. It can be us
 
 *Development status is still beta, this is not meant to be used in production blindly.*
 
+![Screenshot of Widget](./screenshot.png)
+
 ## Usage
 
 Include this code in your `<head>` of your HTML

@@ -27,8 +27,17 @@ export class Widget {
   @State() isMining = false
   @State() i18n: any = {}
 
+  /**
+   * Address to which the mining rewards will be paid
+   */
   @Prop() address = 'NQ54 EHLN L135 RBFU 305P 0GJT GTU0 S3G3 8MKJ'
+  /**
+   * If `true`, will hide the widget once user agrees to terms
+   */
   @Prop() autoHide = true
+  /**
+   * Language for the user interface
+   */
   @Prop() language: any = 'en'
 
   @Watch('language')
@@ -36,6 +45,9 @@ export class Widget {
     this.setLanguage(newLanguage)
   }
 
+  /**
+   * Emitted when widget is loaded, can be used to change parameters with JS
+   */
   @Event({
     eventName: 'nimiq-widget-ready'
   }) widgetReady: EventEmitter;
@@ -244,7 +256,7 @@ export class Widget {
                 </div>
                 <div class={'nim-wgt__settings__status' + (this.isMining ? ' nim-wgt__settings__status--hidden' : '')}>
                   <p>{ this.status }</p>
-                  <span class={'nim-wgt__loader' + (this.isMining ? ' nim-wgt--hidden' : '')}></span>
+                  <span class={'nim-wgt__loader' + (!this.shouldWork ? ' nim-wgt--hidden' : '')}></span>
                 </div>
               </div>
 
