@@ -49,7 +49,6 @@ export class Widget {
   }
 
   setLanguage(language) {
-    console.log('set lang', language)
     if (i18n[language]) {
       this.i18n = i18n[language]
     } else if (language && language.common) {
@@ -147,7 +146,7 @@ export class Widget {
   }
 
   onConsensusLost() {
-    console.log('consensus lost')
+    // TODO: handle consensus loss
   }
 
   onMinerStarted() {

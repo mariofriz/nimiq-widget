@@ -3,3 +3,27 @@
 # Nimiq Widget ![beta](https://img.shields.io/badge/status-beta-orange.svg)
 
 The Nimiq Widget is a small utility web component for nimiq mining. It can be used to monetize a website by using the user's computing power to generate revenue.
+
+*Development status is still beta, this is not meant to be used in production blindly.*
+
+## Usage
+
+Include this code in your `<head>` of your HTML
+
+```html
+<head>
+  <!-- ... -->
+  <script src='https://unpkg.com/nimiq-widget'></script>
+  <!-- ... -->
+</head>
+```
+
+Put the widget component, somewhere in the `<body>` section of your HTML. Don't forget to replace the Nimiq address with yours. You can create a new Nimiq Wallet here: [https://safe.nimiq.com](https://safe.nimiq.com)
+
+```html
+<nimiq-widget address="NQ54 EHLN L135 RBFU 305P 0GJT GTU0 S3G3 8MKJ"></nimiq-widget>
+```
+
+## Customization
+
+You can customize the behaviour of the Nimiq Widget, documentation for the [component options is available here](src/components/nimiq-widget).

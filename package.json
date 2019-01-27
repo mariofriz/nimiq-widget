@@ -1,10 +1,10 @@
 {
   "name": "nimiq-widget",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "nimiq widget to monetize your website",
   "module": "dist/esm/index.js",
-  "main": "dist/index.js",
-  "unpkg": "dist/ionic.js",
+  "main": "dist/nimiqwidget.js",
+  "unpkg": "dist/nimiqwidget.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
