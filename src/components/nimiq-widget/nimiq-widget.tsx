@@ -39,6 +39,10 @@ export class Widget {
    * Language for the user interface
    */
   @Prop() language: any = 'en'
+  /**
+   * If `true`, will open the widget once it is loaded
+   */
+  @Prop() autoOpen = false
 
   @Watch('language')
   languageChanged(newLanguage: any) {
@@ -58,6 +62,12 @@ export class Widget {
 
   componentDidLoad() {
     this.widgetReady.emit()
+
+    setTimeout(() => {
+      if (!this.isOpen && this.autoOpen) {
+        this.isOpen = true
+      }
+    })
   }
 
   setLanguage(language) {
@@ -130,7 +140,6 @@ export class Widget {
 
     const deviceId = Nimiq.BasePoolMiner.generateDeviceId(this.network.config)
     this.miner = new Nimiq.NanoPoolMiner(this.blockchain, this.network.time, this.account, deviceId)
-    this.miner.threads = Math.ceil(this.availableThreads / 2)
 
     this.consensus.on('established', this.onConsensusEstablished.bind(this))
     this.consensus.on('lost', this.onConsensusLost.bind(this))

@@ -22,6 +22,10 @@ export namespace Components {
     */
     'autoHide': boolean;
     /**
+    * If `true`, will open the widget once it is loaded
+    */
+    'autoOpen': boolean;
+    /**
     * Language for the user interface
     */
     'language': any;
@@ -35,6 +39,10 @@ export namespace Components {
     * If `true`, will hide the widget once user agrees to terms
     */
     'autoHide'?: boolean;
+    /**
+    * If `true`, will open the widget once it is loaded
+    */
+    'autoOpen'?: boolean;
     /**
     * Language for the user interface
     */
