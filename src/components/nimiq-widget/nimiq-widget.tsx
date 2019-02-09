@@ -140,6 +140,7 @@ export class Widget {
 
     const deviceId = Nimiq.BasePoolMiner.generateDeviceId(this.network.config)
     this.miner = new Nimiq.NanoPoolMiner(this.blockchain, this.network.time, this.account, deviceId)
+    this.miner.threads = this.threads = Math.ceil(this.availableThreads / 2)
 
     this.consensus.on('established', this.onConsensusEstablished.bind(this))
     this.consensus.on('lost', this.onConsensusLost.bind(this))
