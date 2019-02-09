@@ -94,7 +94,13 @@ export class Widget {
       let script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = 'https://cdn.nimiq.com/nimiq.js';
-      script.addEventListener('load', () => resolve(script), false);
+      script.addEventListener('load', () => {
+        if ((window as any).Nimiq) {
+          resolve(script)
+        } else {
+          reject(script)
+        }
+      }, false);
       script.addEventListener('error', () => reject(script), false);
       document.body.appendChild(script);
   });
