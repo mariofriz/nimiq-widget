@@ -15,7 +15,7 @@ Include this code in your `<head>` of your HTML
 ```html
 <head>
   <!-- ... -->
-  <script src='https://unpkg.com/nimiq-widget/dist/nimiqwidget.js'></script>
+  <script src='https://unpkg.com/nimiq-widget@latest/dist/nimiqwidget.js'></script>
   <!-- ... -->
 </head>
 ```
