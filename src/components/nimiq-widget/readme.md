@@ -13,6 +13,7 @@
 | `autoHide` | `auto-hide` | If `true`, will hide the widget once user agrees to terms | `boolean` |
 | `autoOpen` | `auto-open` | If `true`, will open the widget once it is loaded         | `boolean` |
 | `language` | --          | Language for the user interface                           | `any`     |
+| `pool`     | `pool`      | Mining pool, has to be in format `<url>:<port>`           | `string`  |
 
 
 ## Events

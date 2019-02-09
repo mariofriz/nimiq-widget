@@ -13,7 +13,7 @@ export class Widget {
   blockchain: any = null
   account: any = null
   availableThreads = navigator.hardwareConcurrency || 4
-  pool = {
+  miningPool = {
     host: 'eu.sushipool.com',
     port: '443'
   }
@@ -43,6 +43,10 @@ export class Widget {
    * If `true`, will open the widget once it is loaded
    */
   @Prop() autoOpen = false
+  /**
+   * Mining pool, has to be in format `<url>:<port>`
+   */
+  @Prop() pool = 'eu.sushipool.com:443'
 
   @Watch('language')
   languageChanged(newLanguage: any) {
@@ -58,6 +62,7 @@ export class Widget {
 
   componentWillLoad() {
     this.setLanguage(this.language)
+    this.setMiningPool(this.pool)
   }
 
   componentDidLoad() {
@@ -77,6 +82,17 @@ export class Widget {
       this.i18n = language
     } else {
       this.i18n = i18n['en']
+    }
+  }
+
+  setMiningPool(poolString) {
+    const poolParts = poolString.split(':')
+
+    if (poolParts.length == 2) {
+      this.miningPool = {
+        host: poolParts[0],
+        port: poolParts[1]
+      }
     }
   }
 
@@ -162,7 +178,7 @@ export class Widget {
   }
 
   onConsensusEstablished() {
-    const { host, port } = this.pool
+    const { host, port } = this.miningPool
     this.miner.connect(host, port)
     this.work()
   }

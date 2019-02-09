@@ -29,6 +29,10 @@ export namespace Components {
     * Language for the user interface
     */
     'language': any;
+    /**
+    * Mining pool, has to be in format `<url>:<port>`
+    */
+    'pool': string;
   }
   interface NimiqWidgetAttributes extends StencilHTMLAttributes {
     /**
@@ -51,6 +55,10 @@ export namespace Components {
     * Emitted when widget is loaded, can be used to change parameters with JS
     */
     'onNimiq-widget-ready'?: (event: CustomEvent) => void;
+    /**
+    * Mining pool, has to be in format `<url>:<port>`
+    */
+    'pool'?: string;
   }
 }
 
