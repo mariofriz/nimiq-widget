@@ -78,7 +78,7 @@ $nim-red: #D94432;
     background: #fff;
     color: $nim-blue;
     width: 100vw;
-    max-width: 280px;
+    max-width: 300px;
     border-radius: 8px;
     margin: 0;
     box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16) !important;
@@ -104,7 +104,7 @@ $nim-red: #D94432;
     background: $nim-blue;
     background-image: $nim-blue-bg;
     height: 92px;
-    padding: 16px 12px;
+    padding: 16px 16px;
 
     &__title {
       background: transparent;
@@ -131,7 +131,7 @@ $nim-red: #D94432;
   }
 
   &__content {
-    padding: 12px;
+    padding: 16px;
     margin-top: -48px;
   }
 
