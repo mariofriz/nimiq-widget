@@ -8,6 +8,7 @@ declare var Nimiq: any;
 })
 export class Widget {
   static TERMS_STORAGE_KEY = 'nim-wgt-terms';
+  static DELAY_FOR_AUTO_OPEN = 1000;
 
   miner: any = null
   network: any = null
@@ -19,6 +20,7 @@ export class Widget {
     host: 'eu.sushipool.com',
     port: '443'
   }
+  hasAgreedToTerms = false
 
   @State() isOpen = false
   @State() page = 'help'
@@ -68,9 +70,9 @@ export class Widget {
 
     // check if we need to ask for terms
     try {
-      const hasAgreedToTerms = JSON.parse(localStorage.getItem(Widget.TERMS_STORAGE_KEY))
+      this.hasAgreedToTerms = JSON.parse(localStorage.getItem(Widget.TERMS_STORAGE_KEY))
 
-      if (hasAgreedToTerms) {
+      if (this.hasAgreedToTerms) {
         this.agreeTerms()
       }
     } catch (e) {}
@@ -79,11 +81,13 @@ export class Widget {
   componentDidLoad() {
     this.widgetReady.emit()
 
-    setTimeout(() => {
-      if (!this.isOpen && this.autoOpen) {
-        this.isOpen = true
-      }
-    })
+    if (!this.hasAgreedToTerms) {
+      setTimeout(() => {
+        if (!this.isOpen && this.autoOpen) {
+          this.isOpen = true
+        }
+      }, Widget.DELAY_FOR_AUTO_OPEN)
+    }
   }
 
   setLanguage(language) {
