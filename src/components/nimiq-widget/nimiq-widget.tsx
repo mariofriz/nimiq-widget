@@ -7,6 +7,9 @@ declare var Nimiq: any;
   styleUrl: 'nimiq-widget.scss',
 })
 export class Widget {
+  static TERMS_STORAGE_KEY = 'nim-wgt-terms';
+  static DELAY_FOR_AUTO_OPEN = 1000;
+
   miner: any = null
   network: any = null
   consensus: any = null
@@ -17,6 +20,7 @@ export class Widget {
     host: 'eu.sushipool.com',
     port: '443'
   }
+  hasAgreedToTerms = false
 
   @State() isOpen = false
   @State() page = 'help'
@@ -63,16 +67,27 @@ export class Widget {
   componentWillLoad() {
     this.setLanguage(this.language)
     this.setMiningPool(this.pool)
+
+    // check if we need to ask for terms
+    try {
+      this.hasAgreedToTerms = JSON.parse(localStorage.getItem(Widget.TERMS_STORAGE_KEY))
+
+      if (this.hasAgreedToTerms) {
+        this.agreeTerms()
+      }
+    } catch (e) {}
   }
 
   componentDidLoad() {
     this.widgetReady.emit()
 
-    setTimeout(() => {
-      if (!this.isOpen && this.autoOpen) {
-        this.isOpen = true
-      }
-    })
+    if (!this.hasAgreedToTerms) {
+      setTimeout(() => {
+        if (!this.isOpen && this.autoOpen) {
+          this.isOpen = true
+        }
+      }, Widget.DELAY_FOR_AUTO_OPEN)
+    }
   }
 
   setLanguage(language) {
@@ -183,6 +198,23 @@ export class Widget {
     }
   }
 
+  agreeTerms() {
+    this.goTo('miner')
+    this.startMiner()
+
+    // store in localstorage, so we don't have to ask the next time
+    localStorage.setItem(Widget.TERMS_STORAGE_KEY, JSON.stringify(true));
+  }
+
+  updateThreads(value) {
+    this.miner.threads += value
+    this.threads += value
+  }
+
+  goTo(page: string) {
+    this.page = page
+  }
+
   onConsensusEstablished() {
     const { host, port } = this.miningPool
     this.miner.connect(host, port)
@@ -213,20 +245,6 @@ export class Widget {
     }
 
     this.work()
-  }
-
-  agreeTerms() {
-    this.goTo('miner')
-    this.startMiner()
-  }
-
-  updateThreads(value) {
-    this.miner.threads += value
-    this.threads += value
-  }
-
-  goTo(page: string) {
-    this.page = page
   }
 
   renderButton() {
