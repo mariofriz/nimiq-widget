@@ -1,6 +1,6 @@
 {
   "name": "nimiq-widget",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "nimiq widget to monetize your website",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
